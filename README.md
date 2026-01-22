@@ -1,5 +1,8 @@
 # 🚀 Rate My Ship
 
+![Screenshot 1](./Screenshot%202026-01-23%20025135.png)
+![Screenshot 2](./Screenshot%202026-01-23%20025149.png)
+
 ## 📌 Purpose / Problem Statement
 
 Hackathon participants and indie builders ship projects very fast, but getting **honest technical and product feedback** is difficult.  
