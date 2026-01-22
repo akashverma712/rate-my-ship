@@ -65,6 +65,15 @@ Hackathon participants and indie builders ship projects very fast, but getting *
 
 ---
 
+## 🌍 How to Use
+
+1. Fork the current **Repository**  
+2. Run it **Locally**   
+3. Install the require **packages** 
+4. Create the **.env** file.
+
+---
+
 ## 🔑 Environment Variables
 
 Frontend (`.env`):
