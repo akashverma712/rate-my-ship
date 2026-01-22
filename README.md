@@ -31,8 +31,7 @@ Hackathon participants and indie builders ship projects very fast, but getting *
 ## 🧑‍💻 Tech Stack
 
 ### Frontend
-- **React (Vite)** – fast development & optimized build  
-- **JavaScript (ES6+)**  
+- **React (Vite)** – fast development & optimized build    
 - **CSS / Tailwind**
 
 ### Backend / BaaS
