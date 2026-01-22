@@ -32,7 +32,7 @@ export default function Navbar({ username, onAvatarClick }) {
             >
               <div className="w-10 h-10 bg-[#0f111a] rounded-[14px] flex items-center justify-center overflow-hidden group-hover:bg-transparent transition-colors">
                 <span className="font-black text-white group-hover:scale-110 transition-transform">
-                  {username[0].toUpperCase()}
+                  {username[0].toUpperCase() || "U"}
                 </span>
               </div>
             </button>
