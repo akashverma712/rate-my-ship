@@ -16,20 +16,20 @@ export default function AuthPage({
 }) {
   return (
     <div className="min-h-screen w-full bg-[#05060f] flex items-center justify-center p-6 relative overflow-hidden">
-      
+
       {/* background blobs */}
-      <motion.div 
+      <motion.div
         animate={{ x: [0, 100, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full"
       />
-      <motion.div 
+      <motion.div
         animate={{ x: [0, -80, 0], y: [0, 100, 0], scale: [1, 1.1, 1] }}
         transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-purple-900/10 blur-[120px] rounded-full"
       />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -51,14 +51,14 @@ export default function AuthPage({
         {/* RIGHT */}
         <div className="w-full md:w-7/12 bg-black/20 p-12 flex flex-col justify-center relative">
 
-          {/* login / join toggle */}
+          {/* login / join toggle (hidden in admin mode) */}
           {!isAdminLogin && (
             <div className="absolute top-10 right-12 z-20">
               <div
                 onClick={() => setIsLogin(!isLogin)}
                 className="group w-36 h-11 bg-white/5 rounded-full flex items-center p-1.5 cursor-pointer border border-white/10"
               >
-                <motion.div 
+                <motion.div
                   animate={{ x: isLogin ? 0 : 92 }}
                   className="absolute w-11 h-8 bg-indigo-600 rounded-full"
                 />
@@ -75,7 +75,7 @@ export default function AuthPage({
               {isAdminLogin ? "Admin Access" : isLogin ? "Welcome back" : "Get started"}
             </h2>
 
-            {/* SIGNUP (USER) */}
+            {/* USER SIGNUP */}
             {!isLogin && !isAdminLogin && (
               <>
                 <Input placeholder="Full Name" onChange={(e) => setUsername(e.target.value)} />
@@ -83,7 +83,7 @@ export default function AuthPage({
               </>
             )}
 
-            {/* LOGIN (USER / ADMIN) */}
+            {/* USER LOGIN OR ADMIN LOGIN */}
             {(isLogin || isAdminLogin) && (
               <Input
                 placeholder="Username or Email"
@@ -91,8 +91,8 @@ export default function AuthPage({
               />
             )}
 
-            {/* PASSWORD — ONLY FOR USER */}
-            {!isAdminLogin && (
+            {/* PASSWORD — ONLY FOR USER LOGIN */}
+            {!isAdminLogin && isLogin && (
               <Input
                 type="password"
                 placeholder="Password"
@@ -111,6 +111,7 @@ export default function AuthPage({
                 : "Create Account"}
             </motion.button>
 
+            {/* GOOGLE LOGIN — USER ONLY */}
             {!isAdminLogin && <GoogleButton onClick={onGoogle} />}
           </div>
 
