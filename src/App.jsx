@@ -22,75 +22,93 @@ export default function App() {
 
   const [showAccount, setShowAccount] = useState(false);
 
-  // REGISTER (users only)
+  /* ===================== REGISTER (USERS ONLY) ===================== */
   const handleRegister = async () => {
-    if (isAdminLogin) return alert("Admins cannot register");
+    if (isAdminLogin) {
+      alert("Admins cannot register");
+      return;
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { username } }
+      options: {
+        data: { username }
+      }
     });
 
     if (error) alert(error.message);
     else setIsLogin(true);
   };
 
-  // LOGIN (user + admin)
+  /* ===================== LOGIN (USER + ADMIN) ===================== */
   const handleLogin = async () => {
-    let loginEmail = identifier;
-    let role = null;
-
-    if (!identifier.includes("@")) {
-      const { data } = await supabase
-        .from("profiles")
-        .select("email, role")
-        .eq("username", identifier)
-        .single();
-
-      if (!data) return alert("User not found");
-
-      loginEmail = data.email;
-      role = data.role;
+    if (!identifier) {
+      alert("Enter username or email");
+      return;
     }
 
-    if (isAdminLogin && role !== "admin") {
-      return alert("Admins only");
+    // 1. Fetch profile using username OR email
+    const { data: profileData, error: profileError } = await supabase
+      .from("profiles")
+      .select("email, role")
+      .or(`username.eq.${identifier},email.eq.${identifier}`)
+      .single();
+
+    if (profileError || !profileData) {
+      alert("User not found");
+      return;
     }
 
+    // 2. Admin role check BEFORE login
+    if (isAdminLogin && profileData.role !== "admin") {
+      alert("Admins only");
+      return;
+    }
+
+    // 3. Authenticate (password-based)
     const { error } = await supabase.auth.signInWithPassword({
-      email: loginEmail,
+      email: profileData.email,
       password
     });
 
     if (error) alert(error.message);
   };
 
+  /* ===================== GOOGLE LOGIN ===================== */
   const handleGoogleLogin = async () => {
-    if (isAdminLogin) return alert("Google login disabled for admin");
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    // Allow Google login for BOTH user & admin
+    await supabase.auth.signInWithOAuth({
+      provider: "google"
+    });
   };
 
+  /* ===================== UPDATE USERNAME ===================== */
   const updateUsername = async () => {
-    await supabase
+    const { error } = await supabase
       .from("profiles")
       .update({ username: newUsername })
       .eq("id", user.id);
 
-    setProfile({ ...profile, username: newUsername });
-    setShowAccount(false);
+    if (!error) {
+      setProfile({ ...profile, username: newUsername });
+      setShowAccount(false);
+    }
   };
 
+  /* ===================== LOGOUT ===================== */
   const logout = async () => {
     await supabase.auth.signOut();
   };
 
-  // AUTHENTICATED
+  /* ===================== AUTHENTICATED ===================== */
   if (user && profile) {
+    // 🔐 Admin Gate
     if (profile.role === "admin") {
       return <AdminDashboard />;
     }
 
+    // 👤 Normal User
     return (
       <div className="min-h-screen bg-gray-950 text-white">
         <Navbar
@@ -117,7 +135,7 @@ export default function App() {
     );
   }
 
-  // AUTH PAGE
+  /* ===================== AUTH PAGE ===================== */
   return (
     <AuthCard
       isLogin={isLogin}
