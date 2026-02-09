@@ -12,114 +12,120 @@ export default function AccountPage({
 
   const username = profile.username || "Anonymous";
   const avatarLetter = username.charAt(0).toUpperCase();
+  const isAdmin = profile.role === "admin";
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0a0b14]/90 backdrop-blur-md flex justify-center items-center p-2 sm:p-4">
-      <div className="w-full max-w-5xl bg-[#0f111a] text-gray-200 rounded-3xl flex flex-col sm:flex-row overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5 max-h-[95vh]">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-lg flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl bg-[#0f111a] text-gray-200 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
 
-        {/* SIDEBAR (hidden on mobile) */}
-        <aside className="hidden sm:flex w-64 border-r border-white/5 bg-[#0a0b14]/50 p-8 flex-col justify-between">
+        {/* HEADER */}
+        <header className="flex items-center justify-between px-8 py-6 border-b border-white/5">
           <div>
-            <div className="flex items-center gap-3 mb-10">
-              <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
-                <span className="text-indigo-400 text-sm">🛡️</span>
-              </div>
-              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-gray-500">
-                Settings
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-              <span className="text-lg">👤</span>
-              <span className="font-medium">Profile</span>
-            </div>
+            <h1 className="text-2xl font-bold text-white">Account</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Manage your profile and session
+            </p>
           </div>
 
           <button
-            onClick={onLogout}
-            className="text-sm text-gray-500 hover:text-red-400 transition px-4"
+            onClick={onClose}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white"
           >
-            Sign Out →
+            ✕
           </button>
-        </aside>
+        </header>
 
-        {/* MAIN */}
-        <main className="flex-1 p-6 sm:p-12 overflow-y-auto bg-gradient-to-br from-[#0f111a] via-[#131625] to-[#0f111a]">
-          {/* HEADER */}
-          <div className="flex justify-between items-start mb-10">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white">
-                Account Settings
-              </h1>
-              <p className="text-gray-500 text-sm mt-2">
-                Manage your profile & identity
-              </p>
+        {/* BODY */}
+        <div className="grid grid-cols-1 md:grid-cols-3">
+
+          {/* LEFT PANEL */}
+          <aside className="hidden md:flex flex-col gap-6 p-8 border-r border-white/5 bg-[#0b0d15]">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white">
+                {avatarLetter}
+              </div>
+              <div>
+                <p className="font-semibold text-white">{username}</p>
+                <span
+                  className={`text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border ${
+                    isAdmin
+                      ? "bg-red-500/10 text-red-400 border-red-500/20"
+                      : "bg-green-500/10 text-green-400 border-green-500/20"
+                  }`}
+                >
+                  {isAdmin ? "Admin" : "User"}
+                </span>
+              </div>
+            </div>
+
+            <div className="text-xs text-gray-500 leading-relaxed">
+              Your account controls access, identity, and privileges across the
+              platform.
             </div>
 
             <button
-              onClick={onClose}
-              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white"
+              onClick={onLogout}
+              className="mt-auto text-sm text-red-400 hover:text-red-300 transition"
             >
-              ✕
+              Sign out →
             </button>
-          </div>
+          </aside>
 
-          {/* CONTENT */}
-          <div className="space-y-10">
+          {/* MAIN */}
+          <main className="col-span-2 p-8 space-y-10">
+
             {/* PROFILE */}
             <Section
-              title="Personal Identity"
+              title="Profile Information"
               right={
                 <button
                   onClick={onSave}
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-lg active:scale-95"
+                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-md active:scale-95"
                 >
-                  Save
+                  Save Changes
                 </button>
               }
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl sm:text-4xl font-black text-white shadow-xl">
+              <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-black text-white">
                   {avatarLetter}
                 </div>
 
                 <div className="w-full max-w-sm">
-                  <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
                     Username
                   </label>
                   <input
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
-                    placeholder="Set your alias"
-                    className="mt-2 w-full bg-[#1a1d2e] border border-white/5 rounded-2xl px-5 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                    className="w-full bg-[#1a1d2e] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                   />
                 </div>
               </div>
             </Section>
 
             {/* EMAIL */}
-            <Section title="Email Address">
-              <div className="inline-flex items-center gap-3 px-5 py-3 bg-[#1a1d2e] border border-white/5 rounded-2xl text-gray-300">
-                <span className="text-gray-500 text-xs">@</span>
-                <span className="font-medium break-all">{profile.email}</span>
+            <Section title="Email">
+              <div className="px-4 py-3 rounded-xl bg-[#1a1d2e] border border-white/10 text-sm text-gray-300 break-all">
+                {profile.email}
               </div>
             </Section>
 
-            {/* GOOGLE */}
-            <Section title="Linked Services">
-              <div className="flex flex-wrap items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-3xl">
+            {/* AUTH PROVIDER */}
+            <Section title="Authentication Provider">
+              <div className="flex items-center gap-4 px-5 py-4 bg-white/[0.03] border border-white/10 rounded-2xl">
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   className="w-5 h-5"
                   alt="Google"
                 />
-                <div>
-                  <p className="text-sm font-semibold text-white">Google Account</p>
-                  <p className="text-xs text-gray-500 break-all">
-                    {profile.email}
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-white">Google OAuth</p>
+                  <p className="text-xs text-gray-500">
+                    Signed in via Google
                   </p>
                 </div>
-                <span className="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-[10px] font-bold uppercase">
+                <span className="px-3 py-1 text-[10px] uppercase font-bold rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
                   Active
                 </span>
               </div>
@@ -128,12 +134,13 @@ export default function AccountPage({
             {/* MOBILE LOGOUT */}
             <button
               onClick={onLogout}
-              className="sm:hidden text-red-400 text-sm mt-6"
+              className="md:hidden text-red-400 text-sm pt-4"
             >
-              Sign Out →
+              Sign out →
             </button>
-          </div>
-        </main>
+
+          </main>
+        </div>
       </div>
     </div>
   );
@@ -141,12 +148,12 @@ export default function AccountPage({
 
 function Section({ title, children, right }) {
   return (
-    <div className="border-b border-white/5 pb-8 last:border-0">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
-        <h3 className="text-lg font-semibold text-white/90">{title}</h3>
+    <section className="border-b border-white/5 pb-8 last:border-0">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">{title}</h3>
         {right}
       </div>
       {children}
-    </div>
+    </section>
   );
 }
