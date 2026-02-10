@@ -66,11 +66,11 @@ export default function ShipList({ user, profile }) {
 
       {/* HEADER */}
       <header className="relative z-10 p-10 max-w-7xl mx-auto">
-        <h2 className="text-4xl font-black text-white tracking-tighter italic">
+        <h2 className="text-4xl font-black text-white tracking-tighter">
           SHIP <span className="text-indigo-500 underline underline-offset-8">REVIEW</span>
         </h2>
         <p className="text-gray-500 mt-2 text-sm">
-          [{filteredShips.length} VESSELS FOUND]
+          [{filteredShips.length} SHIPS FOUND]
         </p>
 
         {/* 🔍 SEARCH + SORT CONTROLS */}

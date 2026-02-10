@@ -30,7 +30,7 @@ export default function ShipCard({ ship, user, profile }) {
           </div>
 
           <div className="bg-white/5 px-4 py-2 rounded-2xl border border-white/10">
-            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center">Vessel ID</p>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center">SHIP ID</p>
             <p className="text-white font-mono text-sm">#{ship.id.toString().slice(0, 8)}</p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function ShipCard({ ship, user, profile }) {
         <section>
           <div className="flex items-center gap-2 mb-6">
             <div className="h-4 w-1 bg-indigo-500 rounded-full"></div>
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">New Transmission</h3>
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">SHIP DETAILS</h3>
           </div>
           <ReviewForm shipId={ship.id} user={user} profile={profile} />
         </section>
