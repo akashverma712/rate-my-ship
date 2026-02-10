@@ -15,77 +15,77 @@ export default function AuthPage({
   onGoogle
 }) {
   return (
-    <div className="min-h-screen bg-[#05060f] flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#05060f] flex items-center justify-center px-4 relative overflow-hidden">
 
-      {/* Background glow */}
+      {/* background blobs */}
       <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 18, repeat: Infinity }}
-        className="absolute w-[500px] h-[500px] bg-indigo-600/10 blur-[140px] rounded-full -top-40 -right-40"
+        animate={{ x: [0, 100, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+        className="absolute -top-40 -right-40 w-[520px] h-[520px] bg-indigo-600/15 blur-[140px] rounded-full"
       />
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 20, repeat: Infinity }}
-        className="absolute w-[600px] h-[600px] bg-purple-800/10 blur-[160px] rounded-full -bottom-40 -left-40"
+        animate={{ x: [0, -80, 0], y: [0, 100, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        className="absolute -bottom-40 -left-40 w-[620px] h-[620px] bg-purple-900/15 blur-[160px] rounded-full"
       />
 
-      {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 w-full max-w-5xl bg-[#0b0c17]/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl grid md:grid-cols-2 overflow-hidden"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="flex w-full max-w-5xl min-h-[640px] bg-[#0a0b14]/90 backdrop-blur-2xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.7)] z-10"
       >
 
-        {/* LEFT BRAND */}
-        <div className="hidden md:flex flex-col justify-between p-12 bg-black/30">
+        {/* LEFT */}
+        <div className="hidden md:flex w-5/12 p-12 flex-col justify-between border-r border-white/10 bg-black/20">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-xl">
+            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-lg">
               🚢
             </div>
-            <h1 className="text-2xl font-extrabold text-white">
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">
               Rate My Ship<span className="text-indigo-500">.</span>
             </h1>
           </div>
 
-          <p className="text-gray-400 leading-relaxed max-w-sm">
-            A professional platform to manage, review, and rate ships with
-            precision and ease.
+          <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+            Secure access for users and administrators with a modern, smooth
+            experience.
           </p>
         </div>
 
-        {/* RIGHT FORM */}
-        <div className="p-8 sm:p-12 flex flex-col justify-center relative">
+        {/* RIGHT */}
+        <div className="w-full md:w-7/12 bg-black/30 px-8 sm:px-12 py-14 flex flex-col justify-center relative">
 
-          {/* Toggle */}
+          {/* login / join toggle */}
           {!isAdminLogin && (
-            <div className="absolute top-6 right-6">
+            <div className="absolute top-8 right-8 z-20">
               <div
                 onClick={() => setIsLogin(!isLogin)}
-                className="relative w-32 h-10 bg-white/5 border border-white/10 rounded-full flex items-center cursor-pointer"
+                className="relative w-36 h-11 bg-white/5 rounded-full flex items-center p-1.5 cursor-pointer border border-white/10 hover:border-white/20 transition"
               >
                 <motion.div
-                  animate={{ x: isLogin ? 2 : 66 }}
-                  className="absolute w-14 h-8 bg-indigo-600 rounded-full"
+                  animate={{ x: isLogin ? 0 : 92 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="absolute w-11 h-8 bg-indigo-600 rounded-full"
                 />
-                <div className="relative z-10 w-full flex justify-between px-4 text-[11px] font-semibold uppercase">
-                  <span className={isLogin ? "text-white" : "text-gray-400"}>Login</span>
-                  <span className={!isLogin ? "text-white" : "text-gray-400"}>Join</span>
+                <div className="relative z-10 w-full flex justify-between px-4 text-[10px] font-bold uppercase tracking-wider">
+                  <span className={isLogin ? "text-white" : "text-gray-500"}>
+                    Login
+                  </span>
+                  <span className={!isLogin ? "text-white" : "text-gray-500"}>
+                    Join
+                  </span>
                 </div>
               </div>
             </div>
           )}
 
           <div className="max-w-sm mx-auto w-full">
-            <h2 className="text-3xl font-bold text-white mb-8">
-              {isAdminLogin
-                ? "Admin Access"
-                : isLogin
-                ? "Welcome back"
-                : "Create account"}
+            <h2 className="text-4xl font-extrabold text-white mb-10 tracking-tight">
+              {isAdminLogin ? "Admin Access" : isLogin ? "Welcome back" : "Get started"}
             </h2>
 
-            {/* Signup */}
+            {/* USER SIGNUP */}
             {!isLogin && !isAdminLogin && (
               <>
                 <Input placeholder="Full Name" onChange={(e) => setUsername(e.target.value)} />
@@ -93,7 +93,6 @@ export default function AuthPage({
               </>
             )}
 
-            {/* Login */}
             {(isLogin || isAdminLogin) && (
               <Input
                 placeholder="Username or Email"
@@ -111,14 +110,14 @@ export default function AuthPage({
 
             <motion.button
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
               onClick={onSubmit}
-              className="w-full mt-6 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-bold text-white"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 transition text-white py-5 rounded-2xl mt-6 font-black tracking-wide shadow-lg shadow-indigo-600/30"
             >
               {isAdminLogin
                 ? "Enter Admin Panel"
                 : isLogin
-                ? "Login"
+                ? "Initialize Session"
                 : "Create Account"}
             </motion.button>
 
@@ -129,13 +128,14 @@ export default function AuthPage({
             )}
           </div>
 
-          {/* Admin switch */}
-          <button
+          {/* ADMIN TOGGLE */}
+          <div
+            className="absolute bottom-6 right-8 text-sm text-gray-500 hover:text-indigo-400 cursor-pointer transition"
             onClick={() => setIsAdminLogin(!isAdminLogin)}
-            className="absolute bottom-5 right-6 text-sm text-gray-400 hover:text-indigo-400 transition"
           >
-            {isAdminLogin ? "Switch to User Login" : "Admin Login"}
-          </button>
+            {isAdminLogin ? "Switch to User" : "Admin Login"}
+          </div>
+
         </div>
       </motion.div>
     </div>
@@ -144,9 +144,10 @@ export default function AuthPage({
 
 function Input(props) {
   return (
-    <input
+    <motion.input
       {...props}
-      className="w-full mb-4 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition"
+      whileFocus={{ scale: 1.01 }}
+      className="w-full p-4 rounded-2xl bg-white/[0.04] border border-white/10 text-white placeholder-gray-500 mb-4 focus:outline-none focus:border-indigo-500 transition"
     />
   );
 }
