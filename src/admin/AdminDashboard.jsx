@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import AddShipForm from "./AddShipForm";
 import AdminNavbar from "./AdminNavbar";
 import AdminProfileModal from "./AdminProfileModal";
+import AdminShipList from "./AdminShipList";
 
 export default function AdminDashboard() {
   const { profile } = useAuth();
@@ -43,6 +44,7 @@ export default function AdminDashboard() {
         </h1>
 
         <AddShipForm />
+        <AdminShipList />
       </div>
 
       {/* 👤 PROFILE MODAL */}
