@@ -7,6 +7,7 @@ import AccountModal from "./components/account/AccountModal";
 import AuthCard from "./components/auth/AuthCard";
 import ShipList from "./components/ships/ShipList";
 import AdminDashboard from "./admin/AdminDashboard";
+import ElevenLabsBot from "./components/ElevenLabsBot";
 
 export default function App() {
   const { user, profile, setProfile } = useAuth();
@@ -137,17 +138,20 @@ export default function App() {
 
   /* ===================== AUTH PAGE ===================== */
   return (
-    <AuthCard
-      isLogin={isLogin}
-      setIsLogin={setIsLogin}
-      isAdminLogin={isAdminLogin}
-      setIsAdminLogin={setIsAdminLogin}
-      setIdentifier={setIdentifier}
-      setUsername={setUsername}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      onSubmit={isLogin ? handleLogin : handleRegister}
-      onGoogle={handleGoogleLogin}
-    />
+    <>
+      <AuthCard
+        isLogin={isLogin}
+        setIsLogin={setIsLogin}
+        isAdminLogin={isAdminLogin}
+        setIsAdminLogin={setIsAdminLogin}
+        setIdentifier={setIdentifier}
+        setUsername={setUsername}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        onSubmit={isLogin ? handleLogin : handleRegister}
+        onGoogle={handleGoogleLogin}
+      />
+      <ElevenLabsBot />
+    </>
   );
 }
