@@ -7,7 +7,7 @@ export default function ShipList({ user, profile }) {
   const [ships, setShips] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔍 search + sort state
+  // 🔍 search + sort
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("newest");
 
@@ -22,11 +22,10 @@ export default function ShipList({ user, profile }) {
     setLoading(false);
   };
 
-  // 🧠 FILTER + SORT (derived state)
+  // 🧠 filter + sort
   const filteredShips = useMemo(() => {
     let result = [...ships];
 
-    // 🔍 SEARCH
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter((ship) =>
@@ -37,7 +36,6 @@ export default function ShipList({ user, profile }) {
       );
     }
 
-    // 🔽 SORT
     switch (sortBy) {
       case "newest":
         result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -59,10 +57,11 @@ export default function ShipList({ user, profile }) {
   }, [ships, search, sortBy]);
 
   return (
-    <div className="min-h-screen bg-[#05060f] relative overflow-hidden pb-20">
-      {/* background */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-900/5 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-[#05060f] relative overflow-hidden pb-24">
+
+      {/* BACKGROUND GLOW */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-900/5 blur-[120px] rounded-full" />
 
       {/* HEADER */}
       <header className="relative z-10 p-10 max-w-7xl mx-auto">
@@ -73,8 +72,8 @@ export default function ShipList({ user, profile }) {
           [{filteredShips.length} SHIPS TO REVIEW]
         </p>
 
-        {/* 🔍 SEARCH + SORT CONTROLS */}
-        <div className="mt-6 flex flex-col md:flex-row gap-4 max-w-2xl">
+        {/* SEARCH + SORT */}
+        <div className="mt-6 flex flex-col md:flex-row gap-4 max-w-3xl">
           <input
             type="text"
             placeholder="Search ship"
@@ -86,18 +85,81 @@ export default function ShipList({ user, profile }) {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="p-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none"
+            className="
+              p-3 rounded-xl
+              bg-[#0b0d1a]
+              border border-white/10
+              text-white
+              outline-none
+              appearance-none
+              cursor-pointer
+            "
           >
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-            <option value="name-asc">Name (A → Z)</option>
-            <option value="name-desc">Name (Z → A)</option>
+            <option value="newest" className="bg-[#0b0d1a]">
+              Newest first
+            </option>
+            <option value="oldest" className="bg-[#0b0d1a]">
+              Oldest first
+            </option>
+            <option value="name-asc" className="bg-[#0b0d1a]">
+              Name (A → Z)
+            </option>
+            <option value="name-desc" className="bg-[#0b0d1a]">
+              Name (Z → A)
+            </option>
           </select>
         </div>
       </header>
 
-      {/* LIST */}
+      {/* MAIN CONTENT */}
       <main className="relative z-10 max-w-7xl mx-auto px-10">
+
+        {/* 👉 SUGGEST SHIP CARD */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="
+            mb-14
+            p-10
+            rounded-[2.5rem]
+            bg-white/5
+            border border-white/10
+            backdrop-blur-xl
+            flex flex-col md:flex-row
+            items-center justify-between
+            gap-6
+          "
+        >
+          <div>
+            <h3 className="text-2xl font-black text-white">
+              🚢 Suggest a Ship
+            </h3>
+            <p className="text-gray-400 mt-2 max-w-md">
+              Can’t find your ship? Submit a suggestion and we’ll review it before adding.
+            </p>
+          </div>
+
+          <button
+            onClick={() =>
+              window.open(
+                "https://akash-jeager32.app.n8n.cloud/form/7c1747c4-fe85-45b1-8b5f-0bc1b6c4cd39",
+                "_blank"
+              )
+            }
+            className="
+              bg-indigo-600
+              hover:bg-indigo-700
+              px-8 py-4
+              rounded-2xl
+              text-white
+              font-black
+              shadow-lg
+            "
+          >
+            Open Suggestion Form
+          </button>
+        </motion.div>
+
+        {/* SHIP LIST */}
         {loading ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {[1, 2].map((n) => (
@@ -125,7 +187,7 @@ export default function ShipList({ user, profile }) {
         )}
 
         {!loading && filteredShips.length === 0 && (
-          <div className="text-center py-40 text-gray-400">
+          <div className="text-center py-32 text-gray-400">
             No ships match your search 🚫
           </div>
         )}

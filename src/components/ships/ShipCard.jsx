@@ -48,7 +48,7 @@ export default function ShipCard({ ship, user, profile }) {
         <section className="relative">
           <div className="flex items-center gap-2 mb-6">
             <div className="h-4 w-1 bg-purple-500 rounded-full"></div>
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Historical Logs</h3>
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Previous Feedbacks</h3>
           </div>
           <ReviewList shipId={ship.id} />
         </section>

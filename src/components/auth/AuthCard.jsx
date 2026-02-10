@@ -75,7 +75,6 @@ export default function AuthPage({
               {isAdminLogin ? "Admin Access" : isLogin ? "Welcome back" : "Get started"}
             </h2>
 
-            {/* USER SIGNUP */}
             {!isLogin && !isAdminLogin && (
               <>
                 <Input placeholder="Full Name" onChange={(e) => setUsername(e.target.value)} />
