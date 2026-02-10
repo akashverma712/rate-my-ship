@@ -15,25 +15,25 @@ export default function AuthPage({
   onGoogle
 }) {
   return (
-    <div className="min-h-screen w-full bg-[#05060f] flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#05060f] flex items-center justify-center px-4 py-6 relative overflow-hidden">
 
       {/* background blobs */}
       <motion.div
         animate={{ x: [0, 100, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-        className="absolute -top-40 -right-40 w-[520px] h-[520px] bg-indigo-600/15 blur-[140px] rounded-full"
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute -top-32 -right-32 w-[520px] h-[520px] bg-indigo-600/10 blur-[140px] rounded-full"
       />
       <motion.div
-        animate={{ x: [0, -80, 0], y: [0, 100, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        className="absolute -bottom-40 -left-40 w-[620px] h-[620px] bg-purple-900/15 blur-[160px] rounded-full"
+        animate={{ x: [0, -80, 0], y: [0, 100, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        className="absolute -bottom-32 -left-32 w-[620px] h-[620px] bg-purple-900/10 blur-[140px] rounded-full"
       />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="flex w-full max-w-5xl min-h-[640px] bg-[#0a0b14]/90 backdrop-blur-2xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.7)] z-10"
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex w-full max-w-5xl min-h-[640px] bg-[#0a0b14]/85 backdrop-blur-2xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.6)] z-10"
       >
 
         {/* LEFT */}
@@ -42,14 +42,14 @@ export default function AuthPage({
             <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-lg">
               🚢
             </div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl font-black text-white tracking-tight">
               Rate My Ship<span className="text-indigo-500">.</span>
             </h1>
           </div>
 
-          <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-            Secure access for users and administrators with a modern, smooth
-            experience.
+          <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
+            Login or create an account to explore and rate ships with a smooth,
+            secure experience.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ export default function AuthPage({
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   className="absolute w-11 h-8 bg-indigo-600 rounded-full"
                 />
-                <div className="relative z-10 w-full flex justify-between px-4 text-[10px] font-bold uppercase tracking-wider">
+                <div className="relative z-10 w-full flex justify-between px-4 text-[10px] font-black uppercase tracking-wider">
                   <span className={isLogin ? "text-white" : "text-gray-500"}>
                     Login
                   </span>
@@ -81,15 +81,25 @@ export default function AuthPage({
           )}
 
           <div className="max-w-sm mx-auto w-full">
-            <h2 className="text-4xl font-extrabold text-white mb-10 tracking-tight">
-              {isAdminLogin ? "Admin Access" : isLogin ? "Welcome back" : "Get started"}
+            <h2 className="text-4xl font-bold text-white mb-10 tracking-tight">
+              {isAdminLogin
+                ? "Admin Access"
+                : isLogin
+                ? "Welcome back"
+                : "Get started"}
             </h2>
 
             {/* USER SIGNUP */}
             {!isLogin && !isAdminLogin && (
               <>
-                <Input placeholder="Full Name" onChange={(e) => setUsername(e.target.value)} />
-                <Input placeholder="Email Address" onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  placeholder="Full Name"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <Input
+                  placeholder="Email Address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </>
             )}
 
@@ -100,6 +110,7 @@ export default function AuthPage({
               />
             )}
 
+            {/* PASSWORD — USER LOGIN (UNCHANGED LOGIC) */}
             {!isAdminLogin && isLogin && (
               <Input
                 type="password"
@@ -135,7 +146,6 @@ export default function AuthPage({
           >
             {isAdminLogin ? "Switch to User" : "Admin Login"}
           </div>
-
         </div>
       </motion.div>
     </div>
