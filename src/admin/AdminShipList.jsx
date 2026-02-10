@@ -6,6 +6,13 @@ export default function AdminShipList() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [selectedShip, setSelectedShip] = useState(null);
+  const [form, setForm] = useState({
+    name: "",
+    route: "",
+    description: ""
+  });
+
   useEffect(() => {
     fetchShips();
   }, []);
@@ -16,10 +23,10 @@ export default function AdminShipList() {
 
     const { data, error } = await supabase
       .from("ships")
-      .select("*"); // 🚨 removed created_at ordering
+      .select("*");
 
     if (error) {
-      console.error("Fetch ships error:", error);
+      console.error(error);
       setErrorMsg(error.message);
     } else {
       setShips(data || []);
@@ -28,11 +35,10 @@ export default function AdminShipList() {
     setLoading(false);
   };
 
+  /* ---------------- DELETE ---------------- */
   const deleteShip = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this ship?"
-    );
-    if (!confirmDelete) return;
+    const ok = window.confirm("Delete this ship permanently?");
+    if (!ok) return;
 
     const { error } = await supabase
       .from("ships")
@@ -40,43 +46,71 @@ export default function AdminShipList() {
       .eq("id", id);
 
     if (error) {
-      console.error("Delete ship error:", error);
-      alert("Failed to delete ship: " + error.message);
+      alert(error.message);
     } else {
-      setShips((prev) => prev.filter((ship) => ship.id !== id));
+      setShips((prev) => prev.filter((s) => s.id !== id));
     }
   };
 
+  /* ---------------- EDIT ---------------- */
+  const openEdit = (ship) => {
+    setSelectedShip(ship);
+    setForm({
+      name: ship.name || "",
+      route: ship.route || "",
+      description: ship.description || ""
+    });
+  };
+
+  const updateShip = async () => {
+    const { error } = await supabase
+      .from("ships")
+      .update({
+        name: form.name,
+        route: form.route,
+        description: form.description
+      })
+      .eq("id", selectedShip.id);
+
+    if (error) {
+      alert(error.message);
+    } else {
+      setShips((prev) =>
+        prev.map((s) =>
+          s.id === selectedShip.id ? { ...s, ...form } : s
+        )
+      );
+      setSelectedShip(null);
+    }
+  };
+
+  /* ---------------- UI STATES ---------------- */
   if (loading) {
-    return <p className="text-gray-400 mt-6">Loading ships...</p>;
+    return <p className="text-gray-400 mt-6">Loading ships…</p>;
   }
 
   if (errorMsg) {
-    return (
-      <p className="text-red-400 mt-6">
-        Error loading ships: {errorMsg}
-      </p>
-    );
+    return <p className="text-red-400 mt-6">{errorMsg}</p>;
   }
 
   if (ships.length === 0) {
-    return <p className="text-gray-400 mt-6">No ships added yet.</p>;
+    return <p className="text-gray-400 mt-6">No ships found.</p>;
   }
 
   return (
-    <div className="mt-10">
+    <div className="mt-12">
       <h2 className="text-2xl font-bold mb-6 text-indigo-400">
-        All Ships
+        Manage Ships
       </h2>
 
-      <div className="space-y-4">
+      <div className="grid gap-4">
         {ships.map((ship) => (
           <div
             key={ship.id}
-            className="flex items-center justify-between p-4 rounded-xl bg-[#111322] border border-white/10"
+            className="flex items-center justify-between p-5 rounded-2xl bg-[#0f111a] border border-white/10 hover:border-indigo-500/40 transition"
           >
             <div>
-              <h3 className="font-semibold text-white">
+              <h3 className="text-lg font-semibold text-white">
                 {ship.name}
               </h3>
               <p className="text-sm text-gray-400">
@@ -84,15 +118,106 @@ export default function AdminShipList() {
               </p>
             </div>
 
-            <button
-              onClick={() => deleteShip(ship.id)}
-              className="px-4 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20"
-            >
-              Delete
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => openEdit(ship)}
+                className="px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20"
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={() => deleteShip(ship.id)}
+                className="px-4 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* ================= EDIT MODAL ================= */}
+      {selectedShip && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4">
+          <div className="w-full max-w-xl bg-[#0f111a] border border-white/10 rounded-3xl p-8 text-white relative">
+
+            <button
+              onClick={() => setSelectedShip(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+
+            <h3 className="text-2xl font-bold mb-6">
+              Edit Ship
+            </h3>
+
+            <div className="space-y-5">
+              <Input
+                label="Ship Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({ ...form, name: e.target.value })
+                }
+              />
+
+              <Input
+                label="Route"
+                value={form.route}
+                onChange={(e) =>
+                  setForm({ ...form, route: e.target.value })
+                }
+              />
+
+              <div>
+                <label className="text-xs uppercase tracking-wider text-gray-400">
+                  Description
+                </label>
+                <textarea
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
+                  rows={4}
+                  className="mt-2 w-full rounded-xl bg-[#1a1d2e] border border-white/10 px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500/40 outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-4 mt-8">
+              <button
+                onClick={() => setSelectedShip(null)}
+                className="px-5 py-2 rounded-xl bg-white/5 hover:bg-white/10"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={updateShip}
+                className="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-semibold"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- SMALL INPUT COMPONENT ---------- */
+function Input({ label, ...props }) {
+  return (
+    <div>
+      <label className="text-xs uppercase tracking-wider text-gray-400">
+        {label}
+      </label>
+      <input
+        {...props}
+        className="mt-2 w-full rounded-xl bg-[#1a1d2e] border border-white/10 px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500/40 outline-none"
+      />
     </div>
   );
 }
