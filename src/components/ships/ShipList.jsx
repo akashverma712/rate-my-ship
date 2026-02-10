@@ -70,14 +70,14 @@ export default function ShipList({ user, profile }) {
           SHIP <span className="text-indigo-500 underline underline-offset-8">REVIEW</span>
         </h2>
         <p className="text-gray-500 mt-2 text-sm">
-          [{filteredShips.length} SHIPS FOUND]
+          [{filteredShips.length} SHIPS TO REVIEW]
         </p>
 
         {/* 🔍 SEARCH + SORT CONTROLS */}
         <div className="mt-6 flex flex-col md:flex-row gap-4 max-w-2xl">
           <input
             type="text"
-            placeholder="Search ship (name, IMO, type...)"
+            placeholder="Search ship"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none"

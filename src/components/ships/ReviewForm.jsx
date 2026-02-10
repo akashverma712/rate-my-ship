@@ -50,17 +50,17 @@ export default function ReviewForm({ shipId, user, profile }) {
     >
       <div className="border-b border-white/5 pb-4">
         <h2 className="text-xl font-bold text-white">Share Your Experience</h2>
-        <p className="text-gray-500 text-sm">Your feedback helps the maritime community stay safe.</p>
+        <p className="text-gray-500 text-sm">Your feedback helps other know more about the ship.</p>
       </div>
 
       <div className="grid gap-6">
-        <Rating label="🛋️ Comfort" value={comfort} setValue={setComfort} />
-        <Rating label="🛡️ Safety" value={safety} setValue={setSafety} />
-        <Rating label="🧹 Cleanliness" value={clean} setValue={setClean} />
+        <Rating label="Comfort" value={comfort} setValue={setComfort} />
+        <Rating label="Safety" value={safety} setValue={setSafety} />
+        <Rating label="Cleanliness" value={clean} setValue={setClean} />
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Vessel Feedback</label>
+        <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Ship Feedback</label>
         <textarea
           rows="4"
           className="w-full p-4 rounded-2xl bg-white/[0.03] border border-white/5 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all resize-none shadow-inner"
@@ -70,7 +70,7 @@ export default function ReviewForm({ shipId, user, profile }) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Attach Evidence (Optional)</label>
+        <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Attach Image</label>
         <div className="relative group">
           <input 
             type="file" 
@@ -81,7 +81,7 @@ export default function ReviewForm({ shipId, user, profile }) {
           <div className="border-2 border-dashed border-white/10 group-hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col items-center justify-center transition-all bg-white/[0.01] group-hover:bg-indigo-500/5">
             <span className="text-2xl mb-2">{image ? "✅" : "📸"}</span>
             <p className="text-sm text-gray-400">
-              {image ? image.name : "Click or drag photos to upload"}
+              {image ? image.name  : "Click or drag photos to upload"}
             </p>
           </div>
         </div>
