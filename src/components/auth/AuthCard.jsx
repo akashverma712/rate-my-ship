@@ -83,7 +83,6 @@ export default function AuthPage({
               </>
             )}
 
-            {/* USER LOGIN OR ADMIN LOGIN */}
             {(isLogin || isAdminLogin) && (
               <Input
                 placeholder="Username or Email"
@@ -117,7 +116,7 @@ export default function AuthPage({
 
           {/* ADMIN TOGGLE */}
           <div
-            className="absolute bottom-6 right-10 text-[10px] text-gray-600 cursor-pointer"
+            className="absolute bottom-6 right-10 text-[20px] text-gray-600 cursor-pointer"
             onClick={() => setIsAdminLogin(!isAdminLogin)}
           >
             {isAdminLogin ? "Switch to User" : "Admin Login"}

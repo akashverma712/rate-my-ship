@@ -59,7 +59,7 @@ export default function ReviewList({ shipId }) {
       {reviews.length === 0 ? (
         <div className="bg-[#0f111a] border border-dashed border-white/10 rounded-3xl p-12 text-center">
           <p className="text-gray-500">
-            No logs found for this vessel. Be the first to rate!
+           No  review found for the above ship. 
           </p>
         </div>
       ) : (
