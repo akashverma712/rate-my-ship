@@ -4,23 +4,34 @@ import { supabase } from "../lib/supabase";
 export default function AdminShipList() {
   const [ships, setShips] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     fetchShips();
   }, []);
 
   const fetchShips = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
     const { data, error } = await supabase
       .from("ships")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*"); // 🚨 removed created_at ordering
 
-    if (!error) setShips(data);
+    if (error) {
+      console.error("Fetch ships error:", error);
+      setErrorMsg(error.message);
+    } else {
+      setShips(data || []);
+    }
+
     setLoading(false);
   };
 
   const deleteShip = async (id) => {
-    const confirmDelete = confirm("Are you sure you want to delete this ship?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this ship?"
+    );
     if (!confirmDelete) return;
 
     const { error } = await supabase
@@ -28,17 +39,28 @@ export default function AdminShipList() {
       .delete()
       .eq("id", id);
 
-    if (!error) {
+    if (error) {
+      console.error("Delete ship error:", error);
+      alert("Failed to delete ship: " + error.message);
+    } else {
       setShips((prev) => prev.filter((ship) => ship.id !== id));
     }
   };
 
   if (loading) {
-    return <p className="text-gray-400">Loading ships...</p>;
+    return <p className="text-gray-400 mt-6">Loading ships...</p>;
+  }
+
+  if (errorMsg) {
+    return (
+      <p className="text-red-400 mt-6">
+        Error loading ships: {errorMsg}
+      </p>
+    );
   }
 
   if (ships.length === 0) {
-    return <p className="text-gray-400">No ships added yet.</p>;
+    return <p className="text-gray-400 mt-6">No ships added yet.</p>;
   }
 
   return (
@@ -54,9 +76,11 @@ export default function AdminShipList() {
             className="flex items-center justify-between p-4 rounded-xl bg-[#111322] border border-white/10"
           >
             <div>
-              <h3 className="font-semibold text-white">{ship.name}</h3>
+              <h3 className="font-semibold text-white">
+                {ship.name}
+              </h3>
               <p className="text-sm text-gray-400">
-                {ship.type || "No type"} • {ship.company || "Unknown"}
+                Route: {ship.route || "N/A"}
               </p>
             </div>
 
