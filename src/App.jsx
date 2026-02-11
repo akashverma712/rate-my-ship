@@ -10,7 +10,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 import ElevenLabsBot from "./components/ElevenLabsBot";
 
 export default function App() {
-  const { user, profile, setProfile } = useAuth();
+  const { user, profile, loading, setProfile } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [isAdminLogin, setIsAdminLogin] = useState(false);
@@ -42,43 +42,44 @@ export default function App() {
     else setIsLogin(true);
   };
 
-  /* ===================== LOGIN (USER + ADMIN) ===================== */
+  /* ===================== LOGIN (EMAIL OR USERNAME) ===================== */
   const handleLogin = async () => {
-    if (!identifier) {
-      alert("Enter username or email");
+    if (!identifier || !password) {
+      alert("Enter credentials");
       return;
     }
 
-    // 1. Fetch profile using username OR email
-    const { data: profileData, error: profileError } = await supabase
+    // 🔐 Resolve email from username OR email
+    const { data, error } = await supabase
       .from("profiles")
-      .select("email, role")
+      .select("email")
       .or(`username.eq.${identifier},email.eq.${identifier}`)
-      .single();
+      .limit(1)
+      .maybeSingle();
 
-    if (profileError || !profileData) {
+    if (error || !data?.email) {
       alert("User not found");
       return;
     }
 
-    // 2. Admin role check BEFORE login
-    if (isAdminLogin && profileData.role !== "admin") {
-      alert("Admins only");
-      return;
-    }
-
-    // 3. Authenticate (password-based)
-    const { error } = await supabase.auth.signInWithPassword({
-      email: profileData.email,
+    // 🔐 Authenticate FIRST (NO role check here)
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+      email: data.email,
       password
     });
 
-    if (error) alert(error.message);
+    if (loginError) {
+      alert(loginError.message);
+    }
   };
 
   /* ===================== GOOGLE LOGIN ===================== */
   const handleGoogleLogin = async () => {
-    // Allow Google login for BOTH user & admin
+    if (isAdminLogin) {
+      alert("Admin must login using email & password");
+      return;
+    }
+
     await supabase.auth.signInWithOAuth({
       provider: "google"
     });
@@ -102,9 +103,18 @@ export default function App() {
     await supabase.auth.signOut();
   };
 
+  /* ===================== LOADING ===================== */
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
   /* ===================== AUTHENTICATED ===================== */
   if (user && profile) {
-    // 🔐 Admin Gate
+    // 🔐 Admin Gate (AFTER login)
     if (profile.role === "admin") {
       return <AdminDashboard />;
     }
@@ -136,7 +146,7 @@ export default function App() {
     );
   }
 
-  /* ===================== AUTH PAGE ===================== */
+  /* ===================== AUTH PAGES ===================== */
   return (
     <>
       <AuthCard
