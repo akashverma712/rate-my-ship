@@ -98,5 +98,11 @@ Fork the repository to your GitHub account.
 ### 2. Install Dependencies
 Run the following command to install required packages:
 
+### 3. Setup 
+Setup your supabase and google console and attach the proper redirect URL
+
+### 4. Setting up Environment Variables
+Attach your supabase URL and supabase anon key in your env
+
 ```bash
 npm install
